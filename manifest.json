@@ -1,10 +1,16 @@
 {
   "manifest_version": 2,
-  "name": "Create React Components",
+  "name": "Create Styled Components",
   "version": "1.0.0",
-  "description": "Create React.js components in the browser",
+  "description": "Create Styled Components from Inspecting elements",
   "short_name": "Create React Components",
-  "permissions": ["activeTab", "declarativeContent", "storage", "<all_urls>"],
+  "permissions": [
+    "activeTab", 
+    "declarativeContent", 
+    "clipboardWrite", 
+    "storage",
+    "<all_urls>"
+  ],
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
@@ -13,7 +19,7 @@
     }
   ],
   "browser_action": {
-    "default_title": "Create React components by inspecting elements",
+    "default_title": "Create Styled Components by inspecting elements",
     "default_popup": "popup.html",
     "default_icon": {
       "16": "icons/icon16.png",

@@ -1,15 +1,33 @@
-console.log('Create React ' + new Date());
+console.log('Create React Component - ' + new Date());
+
+function copyToClipboard(text) {
+    var dummy = document.createElement("textarea");
+    // to avoid breaking orgain page when copying more words
+    // cant copy when adding below this code
+    // dummy.style.display = 'none'
+    document.body.appendChild(dummy);
+    //Be careful if you use texarea. setAttribute('value', value), which works with "input" does not work with "textarea". – Eduard
+    dummy.value = text;
+    dummy.select();
+    document.execCommand("copy");
+    document.body.removeChild(dummy);
+}
 
 function setSelectedElement(el, name) {
     // do something with the selected element
   const rules = [];
 
+  try {
   el.classList.forEach(klass => {
     for(styleSheet of document.styleSheets){
-      //console.log(stylesheet);
+      console.log(stylesheet);
+      if(styleSheet.cssRules) {
       const rule = Array.from(styleSheet.cssRules)
         .filter(r => r.selectorText === `.${klass}`)
       rules.push(rule);
+      } else {
+        console.error('Stylesheet rules cannot be read');
+      }
     }
   });
 
@@ -20,20 +38,10 @@ function setSelectedElement(el, name) {
   ${declarations}
   \`;`;
   console.log(code);
+  copyToClipboard(code);
+  } catch(ex) {
+    console.log(ex);
+  }
 }
 
-chrome.runtime.onConnect.addListener(function(devToolsConnection) {
-    // assign the listener function to a variable so we can remove it later
-    var devToolsListener = function(message, sender, sendResponse) {
-      debugger;
-        // Inject a content script into the identified tab
-        chrome.tabs.executeScript(message.tabId,
-            { file: message.scriptToInject });
-    }
-    // add the listener
-    devToolsConnection.onMessage.addListener(devToolsListener);
 
-    devToolsConnection.onDisconnect.addListener(function() {
-         devToolsConnection.onMessage.removeListener(devToolsListener);
-    });
-});
