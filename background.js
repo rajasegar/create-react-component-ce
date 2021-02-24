@@ -1,18 +1,39 @@
-console.log('Create React ');
+console.log('Create React ' + new Date());
 
-function setSelectedElement(el) {
+function setSelectedElement(el, name) {
     // do something with the selected element
-  console.log(el);
   const rules = [];
+
   el.classList.forEach(klass => {
-      console.log(klass);
-    for(styleSheet of window.document.styleSheets){
-      console.log(stylesheet);
+    for(styleSheet of document.styleSheets){
+      //console.log(stylesheet);
       const rule = Array.from(styleSheet.cssRules)
-        .filter(r => r.selectorText === klass)
+        .filter(r => r.selectorText === `.${klass}`)
       rules.push(rule);
     }
   });
 
-  rules.forEach(r => console.log(r[0].cssText));
+  const declarations = rules
+    .filter(r => r.length)
+    .map(r => r[0].style.cssText).join('\n');
+  const code = `const StyledComponent = styled.${el.tagName.toLowerCase()}\`
+  ${declarations}
+  \`;`;
+  console.log(code);
 }
+
+chrome.runtime.onConnect.addListener(function(devToolsConnection) {
+    // assign the listener function to a variable so we can remove it later
+    var devToolsListener = function(message, sender, sendResponse) {
+      debugger;
+        // Inject a content script into the identified tab
+        chrome.tabs.executeScript(message.tabId,
+            { file: message.scriptToInject });
+    }
+    // add the listener
+    devToolsConnection.onMessage.addListener(devToolsListener);
+
+    devToolsConnection.onDisconnect.addListener(function() {
+         devToolsConnection.onMessage.removeListener(devToolsListener);
+    });
+});
