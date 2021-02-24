@@ -1,0 +1,24 @@
+{
+  "manifest_version": 2,
+  "name": "Create React Components",
+  "version": "1.0.0",
+  "description": "Create React.js components in the browser",
+  "short_name": "Create React Components",
+  "permissions": ["activeTab", "declarativeContent", "storage", "<all_urls>"],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "css": ["background.css"],
+      "js" : ["background.js"]
+    }
+  ],
+  "browser_action": {
+    "default_title": "Create React components by inspecting elements",
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png"
+    }
+  },
+  "devtools_page": "devtools.html"
+}
